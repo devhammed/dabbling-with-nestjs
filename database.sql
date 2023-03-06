@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS `medias` (
     `url` VARCHAR(255) NOT NULL,
     `createdAt` DATETIME,
     `updatedAt` DATETIME,
-    `deletedAt` DATETIME,
+    `deletedAt` DATETIME
 );
