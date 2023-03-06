@@ -14,4 +14,7 @@ export enum MediaStatus {
 export class Media {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  type: string;
 }

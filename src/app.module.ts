@@ -14,17 +14,15 @@ import { MediaModule } from './media/media.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        return {
-          type: 'mysql',
-          host: configService.get('DB_HOST'),
-          port: configService.get('DB_PORT'),
-          database: configService.get('DB_NAME'),
-          username: configService.get('DB_USERNAME'),
-          password: configService.get('DB_PASSWORD'),
-          entities: [Media],
-        };
-      },
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        autoLoadEntities: true,
+        host: configService.get('DB_HOST'),
+        port: configService.get('DB_PORT'),
+        database: configService.get('DB_NAME'),
+        username: configService.get('DB_USERNAME'),
+        password: configService.get('DB_PASSWORD'),
+      }),
     }),
     MediaModule,
   ],
