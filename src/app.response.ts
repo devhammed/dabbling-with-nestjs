@@ -36,7 +36,10 @@ export enum ApiResponseStatus {
 }
 
 export class ApiResponse<TData> {
-  @ApiProperty()
+  @ApiProperty({
+    enum: ApiResponseStatus,
+    enumName: 'ApiResponseStatus',
+  })
   status: ApiResponseStatus;
 
   @ApiProperty()
