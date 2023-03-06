@@ -14,6 +14,7 @@ import {
   ApiExtraModels,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
@@ -101,7 +102,7 @@ export class MediaController {
   }
 
   @Delete(':id')
-  @ApiResponseOf(Media)
+  @ApiOkResponse({ description: 'Media deleted.' })
   @ApiNotFoundResponse({ description: 'Media not found.' })
   async destroy(
     @Param('id', ParseUUIDPipe) id: string
