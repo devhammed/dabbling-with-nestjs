@@ -63,7 +63,7 @@ export class MediaService {
 
   async remove(id: string): Promise<boolean> {
     try {
-      await this.mediasRepository.delete(id);
+      await this.mediasRepository.softDelete(id);
 
       return true;
     } catch {

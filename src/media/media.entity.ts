@@ -28,13 +28,19 @@ export class Media {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: MediaType,
+  })
   @ApiProperty({ enum: MediaType, enumName: 'MediaType' })
-  type: string;
+  type: MediaType;
 
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: MediaStatus,
+  })
   @ApiProperty({ enum: MediaStatus, enumName: 'MediaStatus' })
-  status: string;
+  status: MediaStatus;
 
   @Column()
   @ApiProperty({ format: 'url' })

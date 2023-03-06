@@ -8,17 +8,13 @@ export class CreateMediaDto {
   @ApiProperty()
   name: string;
 
-  @IsNotEmpty()
-  @IsString()
   @IsEnum(MediaType)
   @ApiProperty({ enum: MediaType, enumName: 'MediaType' })
-  type: string;
+  type: MediaType;
 
-  @IsNotEmpty()
-  @IsString()
   @IsEnum(MediaStatus)
   @ApiProperty({ enum: MediaStatus, enumName: 'MediaStatus' })
-  status: string;
+  status: MediaStatus;
 
   @ApiProperty()
   @IsNotEmpty()

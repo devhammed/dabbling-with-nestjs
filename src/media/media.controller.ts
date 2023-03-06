@@ -20,26 +20,27 @@ import { Media } from './media.entity';
 import { CreateMediaDto } from './media.dto';
 import { MediaService } from './media.service';
 import {
-  ApiPaginatedResultOf,
-  ApiResultOf,
-  PaginatedResult,
-  Result,
-} from 'src/app.result';
+  ApiPaginatedResponseOf,
+  ApiResponseOf,
+  ApiPaginatedResponse,
+  ApiResponse,
+  ApiResponseStatus,
+} from 'src/app.response';
 
 @ApiTags('medias')
 @Controller('medias')
 @ApiExtraModels(Media)
-@ApiExtraModels(Result)
+@ApiExtraModels(ApiResponse)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get()
-  @ApiPaginatedResultOf(Media)
+  @ApiPaginatedResponseOf(Media)
   async index(
     @Query('page') page: number,
     @Query('perPage') perPage: number,
     @Query('query') query: string
-  ): Promise<PaginatedResult<Media[]>> {
+  ): Promise<ApiPaginatedResponse<Media[]>> {
     const result = await this.mediaService.findAll({
       page,
       perPage,
@@ -50,7 +51,7 @@ export class MediaController {
     const prevPage = page - 1 < 1 ? null : page - 1;
 
     return {
-      ok: true,
+      status: ApiResponseStatus.SUCCESS,
       meta: {
         total: result.total,
         page: result.page,
@@ -63,9 +64,11 @@ export class MediaController {
   }
 
   @Get(':id')
-  @ApiResultOf(Media)
+  @ApiResponseOf(Media)
   @ApiNotFoundResponse({ description: 'Media not found.' })
-  async show(@Param('id', ParseUUIDPipe) id: string): Promise<Result<Media>> {
+  async show(
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<ApiResponse<Media>> {
     const media = await this.mediaService.findOne(id);
 
     if (!media) {
@@ -73,16 +76,16 @@ export class MediaController {
     }
 
     return {
-      ok: true,
+      status: ApiResponseStatus.SUCCESS,
       data: media,
     };
   }
 
   @Post()
-  @ApiResultOf(Media)
+  @ApiResponseOf(Media)
   @ApiBadRequestResponse({ description: 'Validation errors.' })
   @ApiInternalServerErrorResponse({ description: 'Unable to create media.' })
-  async store(@Body() body: CreateMediaDto): Promise<Result<Media>> {
+  async store(@Body() body: CreateMediaDto): Promise<ApiResponse<Media>> {
     const media = await this.mediaService.create(body);
 
     if (!media) {
@@ -90,7 +93,7 @@ export class MediaController {
     }
 
     return {
-      ok: true,
+      status: ApiResponseStatus.SUCCESS,
       data: media,
     };
   }

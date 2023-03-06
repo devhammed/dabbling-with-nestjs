@@ -13,7 +13,7 @@ export const swaggerOptions = new DocumentBuilder()
   .addTag('medias')
   .build();
 
-export class PaginatedResultMeta {
+export class ApiPaginatedResponseMeta {
   @ApiProperty()
   total?: number;
 
@@ -30,25 +30,33 @@ export class PaginatedResultMeta {
   page?: number;
 }
 
-export class Result<TData> {
-  @ApiProperty()
-  ok: boolean;
-
-  data: TData;
+export enum ApiResponseStatus {
+  SUCCESS = 'success',
+  ERROR = 'error',
 }
 
-export class PaginatedResult<TData> extends Result<TData> {
+export class ApiResponse<TData> {
   @ApiProperty()
-  meta?: PaginatedResultMeta;
+  status: ApiResponseStatus;
+
+  @ApiProperty()
+  message?: string;
+
+  data?: TData;
 }
 
-export const ApiResultOf = <TModel extends Type<any>>(model: TModel) => {
+export class ApiPaginatedResponse<TData> extends ApiResponse<TData> {
+  @ApiProperty()
+  meta?: ApiPaginatedResponseMeta;
+}
+
+export const ApiResponseOf = <TModel extends Type<any>>(model: TModel) => {
   return applyDecorators(
     ApiOkResponse({
       schema: {
-        title: `ResultOf${model.name}`,
+        title: `ResponseOf${model.name}`,
         allOf: [
-          { $ref: getSchemaPath(Result) },
+          { $ref: getSchemaPath(ApiResponse) },
           {
             properties: {
               data: { $ref: getSchemaPath(model) },
@@ -60,15 +68,15 @@ export const ApiResultOf = <TModel extends Type<any>>(model: TModel) => {
   );
 };
 
-export const ApiPaginatedResultOf = <TModel extends Type<any>>(
+export const ApiPaginatedResponseOf = <TModel extends Type<any>>(
   model: TModel
 ) => {
   return applyDecorators(
     ApiOkResponse({
       schema: {
-        title: `PaginatedResultOf${model.name}`,
+        title: `PaginatedResponseOf${model.name}`,
         allOf: [
-          { $ref: getSchemaPath(PaginatedResult) },
+          { $ref: getSchemaPath(ApiPaginatedResponse) },
           {
             properties: {
               data: {
