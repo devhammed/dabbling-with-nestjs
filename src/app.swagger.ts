@@ -13,17 +13,22 @@ export const swaggerOptions = new DocumentBuilder()
   .addTag('medias')
   .build();
 
-export class SwaggerPaginatedDto<TData> {
+export class SwaggerPaginatedMeta {
   @ApiProperty()
   total: number;
 
   @ApiProperty()
-  limit: number;
+  perPage: number;
 
   @ApiProperty()
-  offset: number;
+  page: number;
+}
 
-  results: TData[];
+export class SwaggerPaginatedData<TData> {
+  data: TData[];
+
+  @ApiProperty()
+  meta: SwaggerPaginatedMeta;
 }
 
 export const ApiPaginatedResponse = <TModel extends Type<any>>(
@@ -34,15 +39,15 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
       schema: {
         title: `PaginatedResponseOf${model.name}`,
         allOf: [
-          { $ref: getSchemaPath(SwaggerPaginatedDto) },
           {
             properties: {
-              results: {
+              data: {
                 type: 'array',
                 items: { $ref: getSchemaPath(model) },
               },
             },
           },
+          { $ref: getSchemaPath(SwaggerPaginatedData) },
         ],
       },
     }),

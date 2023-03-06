@@ -7,13 +7,13 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiPaginatedResponse, SwaggerPaginatedDto } from 'src/app.swagger';
+import { ApiPaginatedResponse, SwaggerPaginatedData } from 'src/app.swagger';
 import { CreateMediaDto } from './media.dto';
 import { Media } from './media.entity';
 
 @ApiTags('medias')
 @Controller('medias')
-@ApiExtraModels(SwaggerPaginatedDto)
+@ApiExtraModels(SwaggerPaginatedData)
 export class MediaController {
   @Get()
   @ApiPaginatedResponse(Media)

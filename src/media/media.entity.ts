@@ -13,7 +13,7 @@ export enum MediaStatus {
 
 @Entity()
 export class Media {
-  @ApiProperty()
+  @ApiProperty({ format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -24,4 +24,8 @@ export class Media {
   @Column()
   @ApiProperty({ enum: MediaStatus, enumName: 'MediaStatus' })
   status: string;
+
+  @Column()
+  @ApiProperty({ format: 'url' })
+  url: string;
 }
