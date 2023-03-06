@@ -10,7 +10,7 @@ async function bootstrap() {
     abortOnError: false,
   });
   const configService = app.get(ConfigService);
-  const port = configService.get<string>('PORT');
+  const port = configService.get<number>('PORT');
   const swaggerOptions = new DocumentBuilder()
     .setTitle('StereoPay API')
     .setDescription('The StereoPay API documentation.')
