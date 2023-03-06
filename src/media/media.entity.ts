@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 
 export enum MediaType {
   IMAGE = 'image',
@@ -28,4 +35,20 @@ export class Media {
   @Column()
   @ApiProperty({ format: 'url' })
   url: string;
+
+  @Column()
+  @ApiProperty()
+  description: string;
+
+  @CreateDateColumn()
+  @ApiProperty()
+  createdAt?: Date;
+
+  @UpdateDateColumn()
+  @ApiProperty()
+  updatedAt?: Date;
+
+  @DeleteDateColumn()
+  @ApiProperty()
+  deletedAt?: Date;
 }

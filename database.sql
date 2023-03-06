@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `medias` (
     `status` ENUM('active', 'inactive') NOT NULL,
     `description` TEXT NOT NULL,
     `url` VARCHAR(255) NOT NULL,
-    `createdAt` DATETIME NOT NULL,
+    `createdAt` DATETIME,
     `updatedAt` DATETIME,
     `deletedAt` DATETIME,
 );
