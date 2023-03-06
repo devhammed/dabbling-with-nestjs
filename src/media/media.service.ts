@@ -1,5 +1,5 @@
 import { Like, Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Media } from './media.entity';
 import { CreateMediaDto, UpdateMediaDto } from './media.dto';
@@ -54,26 +54,27 @@ export class MediaService {
     }
   }
 
-  async update(id: string, data: UpdateMediaDto): Promise<boolean> {
-    try {
-      await this.mediasRepository.update(id, {
-        ...data,
-        updatedAt: new Date(),
-      });
+  async update(id: string, data: UpdateMediaDto): Promise<Media> {
+    const media = await this.findOne(id);
 
-      return true;
-    } catch {
-      return false;
+    if (!media) {
+      throw new NotFoundException('Media not found.');
     }
+
+    media.status = data.status;
+
+    media.updatedAt = new Date();
+
+    return this.mediasRepository.save(media);
   }
 
-  async remove(id: string): Promise<boolean> {
-    try {
-      await this.mediasRepository.softDelete(id);
+  async remove(id: string): Promise<void> {
+    const media = await this.findOne(id);
 
-      return true;
-    } catch {
-      return false;
+    if (!media) {
+      throw new NotFoundException('Media not found.');
     }
+
+    await this.mediasRepository.softDelete(media.id);
   }
 }

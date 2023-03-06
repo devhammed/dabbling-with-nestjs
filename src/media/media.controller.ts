@@ -7,6 +7,7 @@ import {
   NotFoundException,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -15,11 +16,12 @@ import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { Media } from './media.entity';
-import { CreateMediaDto } from './media.dto';
+import { CreateMediaDto, UpdateMediaDto } from './media.dto';
 import { MediaService } from './media.service';
 import {
   ApiPaginatedResponseOf,
@@ -33,11 +35,27 @@ import {
 @Controller('medias')
 @ApiExtraModels(Media)
 @ApiExtraModels(ApiResponse)
+@ApiExtraModels(ApiPaginatedResponse)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get()
   @ApiPaginatedResponseOf(Media)
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'perPage',
+    required: false,
+    type: Number,
+  })
+  @ApiQuery({
+    name: 'query',
+    required: false,
+    type: String,
+  })
   async index(
     @Query('page') page: number,
     @Query('perPage') perPage: number,
@@ -101,17 +119,30 @@ export class MediaController {
     };
   }
 
+  @Patch(':id')
+  @ApiResponseOf(Media)
+  @ApiNotFoundResponse({ description: 'Media not found.' })
+  @ApiUnprocessableEntityResponse({ description: 'Validation errors.' })
+  async update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: UpdateMediaDto
+  ): Promise<ApiResponse<Media>> {
+    const updatedMedia = await this.mediaService.update(id, body);
+
+    return {
+      status: ApiResponseStatus.SUCCESS,
+      message: 'Media updated.',
+      data: updatedMedia,
+    };
+  }
+
   @Delete(':id')
   @ApiOkResponse({ description: 'Media deleted.' })
   @ApiNotFoundResponse({ description: 'Media not found.' })
   async destroy(
     @Param('id', ParseUUIDPipe) id: string
   ): Promise<ApiResponse<Media>> {
-    const isDeleted = await this.mediaService.remove(id);
-
-    if (!isDeleted) {
-      throw new NotFoundException('Media not found.');
-    }
+    await this.mediaService.remove(id);
 
     return {
       status: ApiResponseStatus.SUCCESS,
