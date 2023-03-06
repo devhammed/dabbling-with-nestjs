@@ -41,7 +41,10 @@ export class MediaService {
 
   async create(data: CreateMediaDto): Promise<Media> {
     try {
-      const media = this.mediasRepository.create(data);
+      const media = this.mediasRepository.create({
+        ...data,
+        createdAt: new Date(),
+      });
 
       const savedMedia = await this.mediasRepository.save(media);
 
@@ -53,7 +56,10 @@ export class MediaService {
 
   async update(id: string, data: UpdateMediaDto): Promise<boolean> {
     try {
-      await this.mediasRepository.update(id, data);
+      await this.mediasRepository.update(id, {
+        ...data,
+        updatedAt: new Date(),
+      });
 
       return true;
     } catch {
