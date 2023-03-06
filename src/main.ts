@@ -29,7 +29,7 @@ async function bootstrap() {
   );
 
   SwaggerModule.setup(
-    'api',
+    'docs',
     app,
     SwaggerModule.createDocument(app, swaggerOptions)
   );
