@@ -94,6 +94,7 @@ export class MediaController {
 
     return {
       status: ApiResponseStatus.SUCCESS,
+      message: 'Media created.',
       data: media,
     };
   }
