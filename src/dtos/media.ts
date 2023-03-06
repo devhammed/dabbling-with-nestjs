@@ -1,3 +1,5 @@
+import { PickType } from '@nestjs/mapped-types';
+import { MediaStatus, MediaType } from 'src/enums/media';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateMediaDto {
@@ -7,12 +9,12 @@ export class CreateMediaDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsEnum(['audio', 'image'])
+  @IsEnum(MediaType)
   type: string;
 
   @IsNotEmpty()
   @IsString()
-  @IsEnum(['active', 'inactive'])
+  @IsEnum(MediaStatus)
   status: string;
 
   @IsNotEmpty()
@@ -23,3 +25,7 @@ export class CreateMediaDto {
   @IsString()
   description: string;
 }
+
+export class UpdateMediaDto extends PickType(CreateMediaDto, [
+  'status',
+] as const) {}
