@@ -11,13 +11,13 @@ export class CreateMediaDto {
   @IsNotEmpty()
   @IsString()
   @IsEnum(MediaType)
-  @ApiProperty()
+  @ApiProperty({ enum: MediaType, enumName: 'MediaType' })
   type: string;
 
   @IsNotEmpty()
   @IsString()
-  @ApiProperty()
   @IsEnum(MediaStatus)
+  @ApiProperty({ enum: MediaStatus, enumName: 'MediaStatus' })
   status: string;
 
   @ApiProperty()
@@ -31,6 +31,4 @@ export class CreateMediaDto {
   description: string;
 }
 
-export class UpdateMediaDto extends PickType(CreateMediaDto, [
-  'status',
-] as const) {}
+export class UpdateMediaDto extends PickType(CreateMediaDto, ['status']) {}
