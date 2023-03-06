@@ -1,6 +1,6 @@
 import { PickType } from '@nestjs/mapped-types';
-import { MediaStatus, MediaType } from 'src/enums/media';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { MediaStatus, MediaType } from './media.entity';
 
 export class CreateMediaDto {
   @IsNotEmpty()

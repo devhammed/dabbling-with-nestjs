@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 
 @Controller('medias')
-export class MediasController {
+export class MediaController {
   @Get()
   async findAll(
     @Query('page') page: number,
