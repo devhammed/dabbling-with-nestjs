@@ -14,7 +14,7 @@ export class MediaService {
     return this.mediasRepository.find();
   }
 
-  findOne(id: number): Promise<Media> {
+  findOne(id: string): Promise<Media> {
     return this.mediasRepository.findOneBy({ id });
   }
 
