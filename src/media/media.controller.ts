@@ -2,40 +2,44 @@ import {
   Body,
   Controller,
   Get,
+  InternalServerErrorException,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Query,
-  Res,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiCreatedResponse,
   ApiExtraModels,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
-  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Response } from 'express';
-import { ApiArrayResultOf, Result } from 'src/app.result';
-import { CreateMediaDto } from './media.dto';
 import { Media } from './media.entity';
+import { CreateMediaDto } from './media.dto';
 import { MediaService } from './media.service';
+import {
+  ApiPaginatedResultOf,
+  ApiResultOf,
+  PaginatedResult,
+  Result,
+} from 'src/app.result';
 
 @ApiTags('medias')
 @Controller('medias')
+@ApiExtraModels(Media)
 @ApiExtraModels(Result)
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get()
-  @ApiArrayResultOf(Media)
+  @ApiPaginatedResultOf(Media)
   async index(
     @Query('page') page: number,
     @Query('perPage') perPage: number,
     @Query('query') query: string
-  ): Promise<Result<Media[]>> {
+  ): Promise<PaginatedResult<Media[]>> {
     const result = await this.mediaService.findAll({
       page,
       perPage,
@@ -59,19 +63,13 @@ export class MediaController {
   }
 
   @Get(':id')
-  @ApiOkResponse({ description: 'Retrieved media.', type: Result<Media> })
+  @ApiResultOf(Media)
   @ApiNotFoundResponse({ description: 'Media not found.' })
-  async show(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Res() res: Response
-  ): Promise<Result<Media> | Response> {
+  async show(@Param('id', ParseUUIDPipe) id: string): Promise<Result<Media>> {
     const media = await this.mediaService.findOne(id);
 
     if (!media) {
-      return res.status(404).json({
-        ok: false,
-        message: 'Media not found.',
-      });
+      throw new NotFoundException();
     }
 
     return {
@@ -81,25 +79,19 @@ export class MediaController {
   }
 
   @Post()
-  @ApiCreatedResponse({
-    type: Media,
-    description: 'The media has been successfully created.',
-  })
+  @ApiResultOf(Media)
   @ApiBadRequestResponse({ description: 'Validation errors.' })
   @ApiInternalServerErrorResponse({ description: 'Unable to create media.' })
-  async store(
-    @Body() body: CreateMediaDto,
-    @Res() res: Response
-  ): Promise<Media | Response> {
+  async store(@Body() body: CreateMediaDto): Promise<Result<Media>> {
     const media = await this.mediaService.create(body);
 
     if (!media) {
-      return res.status(500).json({
-        ok: false,
-        message: 'Unable to create media.',
-      });
+      throw new InternalServerErrorException();
     }
 
-    return media;
+    return {
+      ok: true,
+      data: media,
+    };
   }
 }

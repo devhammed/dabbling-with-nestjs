@@ -13,7 +13,7 @@ export const swaggerOptions = new DocumentBuilder()
   .addTag('medias')
   .build();
 
-export class ResultMeta {
+export class PaginatedResultMeta {
   @ApiProperty()
   total?: number;
 
@@ -34,19 +34,41 @@ export class Result<TData> {
   @ApiProperty()
   ok: boolean;
 
-  @ApiProperty()
-  meta?: ResultMeta;
-
   data: TData;
 }
 
-export const ApiArrayResultOf = <TModel extends Type<any>>(model: TModel) => {
+export class PaginatedResult<TData> extends Result<TData> {
+  @ApiProperty()
+  meta?: PaginatedResultMeta;
+}
+
+export const ApiResultOf = <TModel extends Type<any>>(model: TModel) => {
   return applyDecorators(
     ApiOkResponse({
       schema: {
-        title: `ApiResultOf${model.name}`,
+        title: `ResultOf${model.name}`,
         allOf: [
           { $ref: getSchemaPath(Result) },
+          {
+            properties: {
+              data: { $ref: getSchemaPath(model) },
+            },
+          },
+        ],
+      },
+    })
+  );
+};
+
+export const ApiPaginatedResultOf = <TModel extends Type<any>>(
+  model: TModel
+) => {
+  return applyDecorators(
+    ApiOkResponse({
+      schema: {
+        title: `PaginatedResultOf${model.name}`,
+        allOf: [
+          { $ref: getSchemaPath(PaginatedResult) },
           {
             properties: {
               data: {

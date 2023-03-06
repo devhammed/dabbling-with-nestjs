@@ -41,7 +41,11 @@ export class MediaService {
 
   async create(data: CreateMediaDto): Promise<Media> {
     try {
-      return this.mediasRepository.create(data);
+      const media = this.mediasRepository.create(data);
+
+      const savedMedia = await this.mediasRepository.save(media);
+
+      return savedMedia;
     } catch {
       return null;
     }
