@@ -66,19 +66,10 @@ export class MediaController {
       perPage,
       query,
     });
-    const lastPage = Math.ceil(result.total / perPage);
-    const nextPage = page + 1 > lastPage ? null : page + 1;
-    const prevPage = page - 1 < 1 ? null : page - 1;
 
     return {
       status: ApiResponseStatus.SUCCESS,
-      meta: {
-        total: result.total,
-        page: result.page,
-        perPage: result.perPage,
-        nextPage,
-        prevPage,
-      },
+      meta: result.meta,
       data: result.medias,
     };
   }

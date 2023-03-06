@@ -3,6 +3,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Media } from './media.entity';
 import { CreateMediaDto, UpdateMediaDto } from './media.dto';
+import { ApiPaginatedResponseMeta } from 'src/app.response';
 
 @Injectable()
 export class MediaService {
@@ -17,9 +18,7 @@ export class MediaService {
     query?: string;
   }): Promise<{
     medias: Media[];
-    total: number;
-    perPage: number;
-    page: number;
+    meta: ApiPaginatedResponseMeta;
   }> {
     const perPage = params.perPage || 10;
     const page = params.page || 1;
@@ -31,8 +30,11 @@ export class MediaService {
       take: perPage,
       skip: skip,
     });
+    const lastPage = Math.ceil(total / perPage);
+    const nextPage = page + 1 > lastPage ? null : page + 1;
+    const prevPage = page - 1 < 1 ? null : page - 1;
 
-    return { medias, total, perPage, page };
+    return { medias, meta: { total, page, perPage, nextPage, prevPage } };
   }
 
   async findOne(id: string): Promise<Media> {
