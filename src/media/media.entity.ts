@@ -18,11 +18,15 @@ export enum MediaStatus {
   INACTIVE = 'inactive',
 }
 
-@Entity()
+@Entity({ name: 'medias' })
 export class Media {
   @ApiProperty({ format: 'uuid' })
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ApiProperty()
+  @Column()
+  name: string;
 
   @Column()
   @ApiProperty({ enum: MediaType, enumName: 'MediaType' })

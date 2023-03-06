@@ -13,32 +13,40 @@ export const swaggerOptions = new DocumentBuilder()
   .addTag('medias')
   .build();
 
-export class SwaggerPaginatedMeta {
+export class ResultMeta {
   @ApiProperty()
-  total: number;
+  total?: number;
 
   @ApiProperty()
-  perPage: number;
+  perPage?: number;
 
   @ApiProperty()
-  page: number;
+  nextPage?: number;
+
+  @ApiProperty()
+  prevPage?: number;
+
+  @ApiProperty()
+  page?: number;
 }
 
-export class SwaggerPaginatedData<TData> {
-  data: TData[];
+export class Result<TData> {
+  @ApiProperty()
+  ok: boolean;
 
   @ApiProperty()
-  meta: SwaggerPaginatedMeta;
+  meta?: ResultMeta;
+
+  data: TData;
 }
 
-export const ApiPaginatedResponse = <TModel extends Type<any>>(
-  model: TModel,
-) => {
+export const ApiResult = <TModel extends Type<any>>(model: TModel) => {
   return applyDecorators(
     ApiOkResponse({
       schema: {
-        title: `PaginatedResponseOf${model.name}`,
+        title: `ApiResultOf${model.name}`,
         allOf: [
+          { $ref: getSchemaPath(Result) },
           {
             properties: {
               data: {
@@ -47,9 +55,8 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
               },
             },
           },
-          { $ref: getSchemaPath(SwaggerPaginatedData) },
         ],
       },
-    }),
+    })
   );
 };
