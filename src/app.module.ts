@@ -4,7 +4,10 @@ import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { validateAppConfig } from './app.config';
 import { MediaModule } from './media/media.module';
-import { ValidationExceptionFilter } from './app.exception';
+import {
+  CatchAllExceptionFilter,
+  ValidationExceptionFilter,
+} from './app.exception';
 
 @Module({
   imports: [
@@ -31,6 +34,10 @@ import { ValidationExceptionFilter } from './app.exception';
     {
       provide: APP_FILTER,
       useClass: ValidationExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: CatchAllExceptionFilter,
     },
   ],
 })

@@ -37,3 +37,17 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     });
   }
 }
+
+@Catch()
+export class CatchAllExceptionFilter implements ExceptionFilter {
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const status = exception.getStatus();
+
+    return response.status(status).json({
+      status: ApiResponseStatus.ERROR,
+      message: exception.message ?? exception.name,
+    });
+  }
+}

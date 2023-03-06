@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  InternalServerErrorException,
+  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
@@ -70,10 +73,7 @@ export class MediaController {
     const media = await this.mediaService.findOne(id);
 
     if (!media) {
-      return {
-        status: ApiResponseStatus.ERROR,
-        message: 'Media not found.',
-      };
+      throw new NotFoundException('Media not found.');
     }
 
     return {
@@ -90,16 +90,31 @@ export class MediaController {
     const media = await this.mediaService.create(body);
 
     if (!media) {
-      return {
-        status: ApiResponseStatus.ERROR,
-        message: 'Unable to create media.',
-      };
+      throw new InternalServerErrorException('Unable to create media.');
     }
 
     return {
       status: ApiResponseStatus.SUCCESS,
       message: 'Media created.',
       data: media,
+    };
+  }
+
+  @Delete(':id')
+  @ApiResponseOf(Media)
+  @ApiNotFoundResponse({ description: 'Media not found.' })
+  async destroy(
+    @Param('id', ParseUUIDPipe) id: string
+  ): Promise<ApiResponse<Media>> {
+    const isDeleted = await this.mediaService.remove(id);
+
+    if (!isDeleted) {
+      throw new NotFoundException('Media not found.');
+    }
+
+    return {
+      status: ApiResponseStatus.SUCCESS,
+      message: 'Media deleted.',
     };
   }
 }
