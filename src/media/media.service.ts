@@ -25,7 +25,7 @@ export class MediaService {
     const skip = (page - 1) * perPage;
     const keyword = `%${params.query || ''}%`;
     const [medias, total] = await this.mediasRepository.findAndCount({
-      where: { name: Like(keyword), description: Like(keyword) },
+      where: [{ name: Like(keyword) }, { description: Like(keyword) }],
       order: { name: 'DESC' },
       take: perPage,
       skip: skip,
