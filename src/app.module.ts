@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { validateAppConfig } from './app.config';
 import { MediaModule } from './media/media.module';
+import { ValidationExceptionFilter } from './app.exception';
 
 @Module({
   imports: [
@@ -24,6 +26,12 @@ import { MediaModule } from './media/media.module';
       }),
     }),
     MediaModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ValidationExceptionFilter,
+    },
   ],
 })
 export class AppModule {}

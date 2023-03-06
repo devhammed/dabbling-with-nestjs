@@ -2,19 +2,17 @@ import {
   Body,
   Controller,
   Get,
-  InternalServerErrorException,
-  NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Query,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiExtraModels,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiTags,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { Media } from './media.entity';
 import { CreateMediaDto } from './media.dto';
@@ -86,7 +84,7 @@ export class MediaController {
 
   @Post()
   @ApiResponseOf(Media)
-  @ApiBadRequestResponse({ description: 'Validation errors.' })
+  @ApiUnprocessableEntityResponse({ description: 'Validation errors.' })
   @ApiInternalServerErrorResponse({ description: 'Unable to create media.' })
   async store(@Body() body: CreateMediaDto): Promise<ApiResponse<Media>> {
     const media = await this.mediaService.create(body);

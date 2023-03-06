@@ -1,8 +1,9 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationError, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationException } from './app.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -21,7 +22,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       transform: true,
+      stopAtFirstError: true,
       skipMissingProperties: false,
+      exceptionFactory: (errors) => new ValidationException(errors),
     })
   );
 
