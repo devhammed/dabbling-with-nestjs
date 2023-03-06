@@ -40,7 +40,7 @@ export class Result<TData> {
   data: TData;
 }
 
-export const ApiResult = <TModel extends Type<any>>(model: TModel) => {
+export const ApiArrayResultOf = <TModel extends Type<any>>(model: TModel) => {
   return applyDecorators(
     ApiOkResponse({
       schema: {

@@ -1,5 +1,5 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, IsUrl } from 'class-validator';
 import { MediaStatus, MediaType } from './media.entity';
 
 export class CreateMediaDto {
@@ -23,6 +23,7 @@ export class CreateMediaDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
+  @IsUrl()
   url: string;
 
   @ApiProperty()
