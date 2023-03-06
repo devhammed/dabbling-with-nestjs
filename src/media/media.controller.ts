@@ -5,7 +5,7 @@ import { Media } from './media.entity';
 @Controller('medias')
 export class MediaController {
   @Get()
-  async findAll(
+  async index(
     @Query('page') page: number,
     @Query('perPage') perPage: number,
     @Query('q') query: string,
@@ -14,12 +14,12 @@ export class MediaController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Media> {
+  async show(@Param('id') id: string): Promise<Media> {
     return null;
   }
 
   @Post()
-  async create(@Body() body: CreateMediaDto): Promise<Media> {
+  async store(@Body() body: CreateMediaDto): Promise<Media> {
     console.log(body);
 
     return null;
