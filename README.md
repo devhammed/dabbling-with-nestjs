@@ -11,7 +11,7 @@ This project is created using [Nest.js](http://nestjs.com/).
 ## Usage
 
 - Clone this repository locally.
-- Run `npm install` inside the local repo folder.
+- Run `npm install` inside the local repo folder to install dependencies.
 - Create a MySQL database and user to use.
 - Run the SQL script inside `database.sql` file to setup the tables and other things in the database.
 - Duplicate `.env.example` file to `.env` and fill in variables like `DB_NAME`, `DB_USER` etc.
