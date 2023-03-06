@@ -1,17 +1,5 @@
 import { applyDecorators, Type } from '@nestjs/common';
-import {
-  ApiOkResponse,
-  ApiProperty,
-  DocumentBuilder,
-  getSchemaPath,
-} from '@nestjs/swagger';
-
-export const swaggerOptions = new DocumentBuilder()
-  .setTitle('StereoPay API')
-  .setDescription('The StereoPay API documentation.')
-  .setVersion('1.0.0')
-  .addTag('medias')
-  .build();
+import { ApiOkResponse, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
 export class ApiPaginatedResponseMeta {
   @ApiProperty()

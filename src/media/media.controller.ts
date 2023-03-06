@@ -72,7 +72,10 @@ export class MediaController {
     const media = await this.mediaService.findOne(id);
 
     if (!media) {
-      throw new NotFoundException();
+      return {
+        status: ApiResponseStatus.ERROR,
+        message: 'Media not found.',
+      };
     }
 
     return {
@@ -89,7 +92,10 @@ export class MediaController {
     const media = await this.mediaService.create(body);
 
     if (!media) {
-      throw new InternalServerErrorException();
+      return {
+        status: ApiResponseStatus.ERROR,
+        message: 'Unable to create media.',
+      };
     }
 
     return {

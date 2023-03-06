@@ -1,8 +1,7 @@
-import { SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { swaggerOptions } from './app.response';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -11,6 +10,12 @@ async function bootstrap() {
   });
   const configService = app.get(ConfigService);
   const port = configService.get<string>('PORT');
+  const swaggerOptions = new DocumentBuilder()
+    .setTitle('StereoPay API')
+    .setDescription('The StereoPay API documentation.')
+    .setVersion('1.0.0')
+    .addTag('medias')
+    .build();
 
   app.useGlobalPipes(
     new ValidationPipe({
