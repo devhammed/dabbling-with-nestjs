@@ -22,6 +22,8 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
+    console.log('errors', exception);
+
     return response.status(status).json({
       status: ApiResponseStatus.ERROR,
       message: exception.message,
