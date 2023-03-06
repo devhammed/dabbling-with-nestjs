@@ -141,7 +141,7 @@ export class MediaController {
   @ApiNotFoundResponse({ description: 'Media not found.' })
   async destroy(
     @Param('id', ParseUUIDPipe) id: string
-  ): Promise<ApiResponse<Media>> {
+  ): Promise<ApiResponse<void>> {
     await this.mediaService.remove(id);
 
     return {
