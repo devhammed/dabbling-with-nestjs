@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { validateAppConfig } from './app.config';
-import { Media } from './media/media.entity';
 import { MediaModule } from './media/media.module';
 
 @Module({
