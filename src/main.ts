@@ -12,8 +12,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('StereoPay API')
-    .setDescription('The StereoPay API documentation.')
+    .setTitle('Dabbling API')
+    .setDescription('The Dabbling with NestJS API documentation.')
     .setVersion('1.0.0')
     .addTag('medias')
     .build();
