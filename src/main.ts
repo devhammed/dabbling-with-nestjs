@@ -17,6 +17,7 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addTag('medias')
     .build();
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -28,11 +29,7 @@ async function bootstrap() {
     })
   );
 
-  SwaggerModule.setup(
-    'docs',
-    app,
-    SwaggerModule.createDocument(app, swaggerOptions)
-  );
+  SwaggerModule.setup('docs', app, swaggerDocument);
 
   await app.listen(port);
 }
