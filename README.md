@@ -1,4 +1,4 @@
-# Stereo Pay
+# Dabbling with NestJS.
 
 This project is created using [Nest.js](http://nestjs.com/).
 
